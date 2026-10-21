@@ -1,15 +1,12 @@
-const CACHE = 'webclub-v1';
+const CACHE = 'webclub-v2';
 const PRECACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/src/css/variables.css',
-  '/src/css/reset.css',
-  '/src/css/typography.css',
-  '/src/css/layout.css',
-  '/src/css/categories.css',
-  '/src/css/form.css',
-  '/src/css/responsive.css',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  '/icons/favicon-32x32.png',
+  '/icons/logo.svg',
 ];
 
 self.addEventListener('install', (e) => {
@@ -30,7 +27,54 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+
+  const url = new URL(e.request.url);
+  if (url.origin !== self.location.origin) return;
+
+  // Navigations: network-first so a fresh deploy is picked up immediately,
+  // falling back to the cached shell when offline.
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put('/index.html', copy));
+          return res;
+        })
+        .catch(() => caches.match('/index.html'))
+    );
+    return;
+  }
+
+  // Hashed build assets are immutable: cache-first.
+  if (url.pathname.startsWith('/assets/')) {
+    e.respondWith(
+      caches.match(e.request).then(
+        (cached) =>
+          cached ||
+          fetch(e.request).then((res) => {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(e.request, copy));
+            return res;
+          })
+      )
+    );
+    return;
+  }
+
+  // Everything else: stale-while-revalidate.
   e.respondWith(
-    caches.match(e.request).then((cached) => cached || fetch(e.request).catch(() => caches.match('/index.html')))
+    caches.match(e.request).then((cached) => {
+      const network = fetch(e.request)
+        .then((res) => {
+          if (res && res.status === 200 && res.type === 'basic') {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(e.request, copy));
+          }
+          return res;
+        })
+        .catch(() => cached);
+      return cached || network;
+    })
   );
 });
