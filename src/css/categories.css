@@ -2,6 +2,7 @@
 
 .category-grid {
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-md);
   padding: var(--spacing-md);
 }
@@ -51,10 +52,10 @@
   }
 }
 
-/* Three-column grid on large screens */
+/* Three-column grid on large screens -- overridden by 2-col strict layout */
 @media (min-width: 1024px) {
   .category-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

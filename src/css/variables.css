@@ -11,6 +11,7 @@
 
   --color-bg: #f8fafc;
   --color-surface: #ffffff;
+  --color-surface-translucent: rgba(255, 255, 255, 0.72);
   --color-text: #1e293b;
   --color-text-muted: #64748b;
   --color-border: #e2e8f0;
@@ -40,6 +41,7 @@
   :root {
     --color-bg: #0f172a;
     --color-surface: #1e293b;
+    --color-surface-translucent: rgba(30, 41, 59, 0.78);
     --color-text: #f1f5f9;
     --color-text-muted: #94a3b8;
     --color-border: #334155;

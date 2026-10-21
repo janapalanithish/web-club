@@ -1,0 +1,110 @@
+/* Ambient animated background
+   ---------------------------------------------------------------------------
+   Three drifting gradient orbs behind a subtle grid, rendered on a single
+   fixed pseudo-element layer with `transform`/`opacity` only.
+
+   Performance notes:
+   - `transform` and `opacity` are compositor-only properties, so the orbs
+     never trigger layout or paint.
+   - The layer is `position: fixed` with `will-change: transform`, promoting it
+     to its own GPU layer.
+   - Animations are pure CSS (no JS rAF), so they cost nothing on the main
+     thread.
+   - `prefers-reduced-motion` freezes the drift entirely.
+   --------------------------------------------------------------------------- */
+
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 800px at 12% -10%, rgba(59, 130, 246, 0.20), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, rgba(139, 92, 246, 0.18), transparent 55%),
+    linear-gradient(180deg, #070b18 0%, #0b1226 45%, #070b18 100%);
+  contain: strict;
+}
+
+/* Drifting orbs */
+.ambient-bg::before {
+  content: '';
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(closest-side, rgba(59, 130, 246, 0.42), transparent 70%) 18% 24% / 46vmax 46vmax no-repeat,
+    radial-gradient(closest-side, rgba(139, 92, 246, 0.38), transparent 70%) 78% 32% / 40vmax 40vmax no-repeat,
+    radial-gradient(closest-side, rgba(6, 182, 212, 0.30), transparent 70%) 42% 78% / 44vmax 44vmax no-repeat;
+  filter: blur(24px);
+  opacity: 0.85;
+  will-change: transform;
+  animation: ambient-drift 26s ease-in-out infinite alternate;
+}
+
+/* Subtle grid lines that fade in behind the orbs */
+.ambient-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.055) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
+  animation: ambient-pulse 9s ease-in-out infinite;
+}
+
+@keyframes ambient-drift {
+  0% {
+    transform: translate3d(-4%, -3%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, 4%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(5%, -4%, 0) scale(1.02);
+  }
+}
+
+@keyframes ambient-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* Light mode: keep the page airy but retain a hint of the ambient effect */
+@media (prefers-color-scheme: light) {
+  .ambient-bg {
+    background:
+      radial-gradient(1100px 760px at 10% -12%, rgba(59, 130, 246, 0.16), transparent 60%),
+      radial-gradient(900px 640px at 100% 0%, rgba(139, 92, 246, 0.14), transparent 55%),
+      linear-gradient(180deg, #f6f8ff 0%, #eef2fb 50%, #f6f8ff 100%);
+  }
+
+  .ambient-bg::before {
+    opacity: 0.55;
+  }
+
+  .ambient-bg::after {
+    background-image:
+      linear-gradient(rgba(59, 130, 246, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.07) 1px, transparent 1px);
+  }
+}
+
+/* Respect the OS reduced-motion setting */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-bg::before,
+  .ambient-bg::after {
+    animation: none;
+  }
+
+  .ambient-bg::before {
+    transform: none;
+  }
+}

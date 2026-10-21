@@ -1,6 +1,6 @@
 /* Responsive design — mobile-first, no horizontal overflow */
 
-/* Category grid: mobile-first single column */
+/* Category grid: strict 2-column (always) */
 @media (min-width: 640px) {
   .category-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -9,7 +9,7 @@
 
 @media (min-width: 1024px) {
   .category-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
