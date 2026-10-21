@@ -1,0 +1,93 @@
+/* Layout and shell */
+
+#app {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--color-surface);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header h1 {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding: var(--spacing-md);
+}
+
+nav {
+  display: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+section {
+  margin-bottom: var(--spacing-lg);
+}
+
+footer {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  background-color: var(--color-surface);
+  margin-top: auto;
+}
+
+/* Navigation button */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background-color: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+.nav-link {
+  display: block;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+  background-color: var(--color-bg);
+}

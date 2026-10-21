@@ -1,0 +1,20 @@
+/* Typography */
+
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+h1 { font-size: var(--font-size-xl); }
+h2 { font-size: var(--font-size-lg); }
+
+p { margin-bottom: var(--spacing-sm); }
+
+.small { font-size: var(--font-size-sm); }
+
+.color-text-muted { color: var(--color-text-muted); }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.text-center { text-align: center; }
+.text-break { overflow-wrap: break-word; word-break: break-all; }
