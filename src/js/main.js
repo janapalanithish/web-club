@@ -17,8 +17,15 @@ import { isValidCategory } from './categories.js';
 
 const app = document.getElementById('app');
 
+let currentCleanup = null;
+
 async function route() {
   if (!app) return;
+
+  if (currentCleanup && typeof currentCleanup === 'function') {
+    currentCleanup();
+    currentCleanup = null;
+  }
 
   const hash = window.location.hash;
   const queryIndex = hash.indexOf('?');
@@ -34,7 +41,7 @@ async function route() {
   if (categoryMatch) {
     const id = decodeURIComponent(categoryMatch[1]);
     if (isValidCategory(id)) {
-      await renderCategory(app, id);
+      currentCleanup = await renderCategory(app, id);
     } else {
       renderHome(app);
     }

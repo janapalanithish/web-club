@@ -46,16 +46,29 @@ export async function renderCategory(app, id) {
   app.appendChild(main);
   app.appendChild(fab);
 
-  // Load links
-  const links = await storage.getLinks(id);
-  if (links.length === 0) {
-    listContainer.innerHTML = `<div class="empty-state"><p>No links yet.</p><p>Tap <strong>+</strong> to add one.</p></div>`;
-  } else {
-    renderLinks(listContainer, links, async (link) => {
-      await storage.deleteLink(link.id);
-      showToast('Deleted: ' + link.name);
-      // Refresh
-      window.location.hash = '#/category/' + id;
-    });
-  }
+  // Load links and keep view in sync with storage mutations
+  const refresh = async () => {
+    const links = await storage.getLinks(id);
+    if (links.length === 0) {
+      listContainer.innerHTML = `<div class="empty-state"><p>No links yet.</p><p>Tap <strong>+</strong> to add one.</p></div>`;
+    } else {
+      renderLinks(listContainer, links, async (link) => {
+        await storage.deleteLink(link.id);
+        showToast('Deleted: ' + link.name);
+        await refresh();
+      });
+    }
+  };
+
+  await refresh();
+
+  // When a link is added elsewhere (e.g. form submitted), refresh this view.
+  // The returned cleanup is invoked by the router before the next render.
+  const unsubscribe = storage.onChange((event) => {
+    if (event.category === id) {
+      refresh();
+    }
+  });
+
+  return unsubscribe;
 }
