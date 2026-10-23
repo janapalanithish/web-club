@@ -18,7 +18,10 @@ export async function renderCategory(app, id) {
   const header = document.createElement('header');
   header.innerHTML = `
     <a href="#/" class="back-btn" aria-label="Back to categories">← Back</a>
-    <h1 style="color:${cat.color};font-size:var(--font-size-lg);">${cat.icon} ${cat.name}</h1>
+    <div style="display:flex;align-items:center;gap:0.5rem;">
+      <img src="/assets/icon.png" alt="Web Club" style="width:32px;height:32px;border-radius:8px;object-fit:cover;box-shadow:0 2px 8px rgba(59,130,246,0.3);"/>
+      <h1 style="color:${cat.color};font-size:var(--font-size-lg);">${cat.icon} ${cat.name}</h1>
+    </div>
     <div></div>
   `;
 

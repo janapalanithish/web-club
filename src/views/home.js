@@ -10,7 +10,13 @@ export function renderHome(app) {
   main.id = 'main';
 
   const heading = document.createElement('section');
-  heading.innerHTML = `<h1>Web Club</h1><p class="color-text-muted">Categorize useful links discovered across the web.</p>`;
+  heading.innerHTML = `
+    <div class="app-header-brand" style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+      <img src="/assets/icon.png" alt="Web Club" style="width:48px;height:48px;border-radius:12px;box-shadow:0 4px 14px rgba(59,130,246,0.35);object-fit:cover;"/>
+      <h1 style="margin:0;font-size:2rem;letter-spacing:-0.02em;">Web Club</h1>
+    </div>
+    <p class="color-text-muted">Categorize useful links discovered across the web.</p>
+  `;
   main.appendChild(heading);
 
   const grid = document.createElement('div');
