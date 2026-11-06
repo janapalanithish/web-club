@@ -24,6 +24,7 @@
     "vite": "^8.3.5"
   },
   "dependencies": {
-    "@capacitor-community/sqlite": "^8.1.1"
+    "@capacitor-community/sqlite": "^8.1.1",
+    "@supabase/supabase-js": "^2.119.0"
   }
 }
