@@ -42,6 +42,7 @@ export function renderLinks(container, links, onDelete) {
   links.forEach((link) => {
     const item = document.createElement('div');
     item.className = 'link-item';
+    item.style.cursor = 'pointer';
 
     const body = document.createElement('div');
     body.style.minWidth = '0';
@@ -60,11 +61,23 @@ export function renderLinks(container, links, onDelete) {
     const actions = document.createElement('div');
     actions.className = 'link-item-actions';
 
-    const openBtn = document.createElement('button');
-    openBtn.type = 'button';
-    openBtn.textContent = 'Open';
-    openBtn.setAttribute('aria-label', 'Open ' + link.name);
-    openBtn.addEventListener('click', () => {
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.setAttribute('aria-label', 'Delete ' + link.name);
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      onDelete(link);
+    });
+
+    actions.appendChild(deleteBtn);
+
+    item.appendChild(body);
+    item.appendChild(actions);
+    container.appendChild(item);
+
+    // Tap-to-redirect: open URL in new tab when card is clicked
+    item.addEventListener('click', () => {
       const url = link.description.trim();
       if (/^https?:\/\//i.test(url)) {
         window.open(url, '_blank', 'noopener,noreferrer');
@@ -72,18 +85,5 @@ export function renderLinks(container, links, onDelete) {
         showToast('No URL to open — this entry is a note');
       }
     });
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.type = 'button';
-    deleteBtn.textContent = 'Delete';
-    deleteBtn.setAttribute('aria-label', 'Delete ' + link.name);
-    deleteBtn.addEventListener('click', () => onDelete(link));
-
-    actions.appendChild(openBtn);
-    actions.appendChild(deleteBtn);
-
-    item.appendChild(body);
-    item.appendChild(actions);
-    container.appendChild(item);
   });
 }

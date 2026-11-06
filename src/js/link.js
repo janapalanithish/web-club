@@ -13,18 +13,6 @@ export function createLink({ category, name, description }) {
 }
 
 export function validateLink(link) {
-  const errors = [];
-  if (!link.name || link.name.length === 0) {
-    errors.push('Name is required');
-  } else if (link.name.length > 120) {
-    errors.push('Name exceeds 120 characters');
-  }
-
-  if (!link.description || link.description.length === 0) {
-    errors.push('Description is required');
-  } else if (link.description.length > 500) {
-    errors.push('Description exceeds 500 characters');
-  }
-
-  return errors;
+  // No required checks, no length restrictions.
+  return [];
 }
